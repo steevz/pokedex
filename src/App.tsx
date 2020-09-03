@@ -53,6 +53,11 @@ const PokeStat = styled.p`
   ${tw`text-white font-bold text-sm`}
 `
 
+const RegionText = styled.p`
+  ${tw`text-white font-bold text-xl transform -rotate-90 absolute left-0 capitalize `}
+  bottom: 15%;
+`
+
 const TypesWrapper=styled.div`
   ${tw`flex flex-row items-center`}
 `
@@ -75,7 +80,8 @@ interface IPokemon  {
   baseSpecDefense: number
   baseSpeed: number
   jaName: string,
-  pokemonType: string[]
+  pokemonType: string[],
+  generationParam: number
 }
 
 const App: React.FC = () => {
@@ -94,9 +100,10 @@ const App: React.FC = () => {
       baseSpecDefense: 0,
       baseSpeed: 0,
       jaName: '',
-      pokemonType: []
-
+      pokemonType: [],
+      generationParam: 1,
   })
+  const [region, setRegion] = useState<string>('')
 
   const getPokemon = (id: number): void => {
     let fullData = `https://pokeapi.co/api/v2/pokemon/${id}/`
@@ -140,12 +147,32 @@ const App: React.FC = () => {
 
       // daj mi japansko ime
       let {names: {9: {name: jaName }}} = resTwo.data
+      
+      let {generation: {url: generationURL }} = resTwo.data
+      let generationParamString = generationURL.substring(37,38);
+      let generationParam = parseInt(generationParamString, 10)
 
-      let responseObject = (() => ({pokemon_id, name, front_default, height, weight, base_experience, baseHp, baseAttack, baseDefense, baseSpecAttack, baseSpecDefense, baseSpeed, jaName, pokemonType}))
-      setPokemon(responseObject)  
+      let responseObject = (() => ({pokemon_id, name, front_default, height, weight, base_experience, baseHp, baseAttack, baseDefense, baseSpecAttack, baseSpecDefense, baseSpeed, jaName, pokemonType, generationParam}))
+      setPokemon(responseObject) 
+      getRegion(generationParam)
     }))
+  }
+
+
+  const getRegion = (gen_id: number) => {
+    let region = `https://pokeapi.co/api/v2/generation/${gen_id}/`
+
+    axios
+        .get(region)
+        .then((resThree) => {
+            // daj mi region name
+            let {main_region: {name: regionName }} = resThree.data
+            console.log(regionName)
+            setRegion(regionName)
+        })
     
   }
+
   // hook za lifeCycle componentWillMount
   useEffect(() => {
     getPokemon(1)
@@ -168,6 +195,7 @@ const App: React.FC = () => {
       </Row>
       <Wrapper>
         <Row>
+          {region ? <RegionText>Region: {region}</RegionText> : undefined}
           <JapanesseName>{pokemon.jaName}</JapanesseName>
           <PokemonImage src={pokemon.front_default} alt="Image of pokemon" />
           <TypesWrapper>
