@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios'
 import styled from "styled-components"
 import tw from "twin.macro"
@@ -69,7 +69,6 @@ const TypeIcon = styled.img`
 interface IPokemon  {
   pokemon_id: number
   name: string
-  front_default: string
   height: number
   weight: number
   base_experience: number
@@ -87,9 +86,8 @@ interface IPokemon  {
 const App: React.FC = () => {
   const [id, setId] = useState<number>(1)
   const [pokemon, setPokemon] = useState<IPokemon>({
-      pokemon_id: 0,
+      pokemon_id: 1,
       name: '',
-      front_default: '',
       height: 0,
       weight: 0,
       base_experience: 0,
@@ -105,7 +103,8 @@ const App: React.FC = () => {
   })
   const [region, setRegion] = useState<string>('')
 
-  const getPokemon = (id: number): void => {
+  // funkcija koja vraca objekat sa podacima o pokemnima uz pomoc destructuring-a
+  const getPokemon = useCallback((id: number): void => {
     let fullData = `https://pokeapi.co/api/v2/pokemon/${id}/`
     let jaName = `https://pokeapi.co/api/v2/pokemon-species/${id}/`
 
@@ -119,8 +118,6 @@ const App: React.FC = () => {
       let {data: {id: pokemon_id }} = resOne
       // daj mi name 
       let { data: {name } } = resOne
-      // daj mi sprite: moro sam koristit "" zbog offical-artwork
-      let { "data": {"sprites": {"other": {"official-artwork": {front_default }}}}} = resOne
       // daj mi height
       let {data: {height}} = resOne
        // daj mi weight
@@ -152,11 +149,11 @@ const App: React.FC = () => {
       let generationParamString = generationURL.substring(37,38);
       let generationParam = parseInt(generationParamString, 10)
 
-      let responseObject = (() => ({pokemon_id, name, front_default, height, weight, base_experience, baseHp, baseAttack, baseDefense, baseSpecAttack, baseSpecDefense, baseSpeed, jaName, pokemonType, generationParam}))
+      let responseObject = (() => ({pokemon_id, name, height, weight, base_experience, baseHp, baseAttack, baseDefense, baseSpecAttack, baseSpecDefense, baseSpeed, jaName, pokemonType, generationParam}))
       setPokemon(responseObject) 
       getRegion(generationParam)
     }))
-  }
+  },[])
 
 
   const getRegion = (gen_id: number) => {
@@ -167,7 +164,6 @@ const App: React.FC = () => {
         .then((resThree) => {
             // daj mi region name
             let {main_region: {name: regionName }} = resThree.data
-            console.log(regionName)
             setRegion(regionName)
         })
     
@@ -176,7 +172,7 @@ const App: React.FC = () => {
   // hook za lifeCycle componentWillMount
   useEffect(() => {
     getPokemon(1)
-  }, [])
+  }, [getPokemon])
 
   const handleChange = (e: any) => {
     setId(e.target.value)
@@ -197,7 +193,7 @@ const App: React.FC = () => {
         <Row>
           {region ? <RegionText>Region: {region}</RegionText> : undefined}
           <JapanesseName>{pokemon.jaName}</JapanesseName>
-          <PokemonImage src={pokemon.front_default} alt="Image of pokemon" />
+          {pokemon.pokemon_id < 10 ? <PokemonImage src={pokemon.pokemon_id >= 10 ? `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokemon.pokemon_id}.png` : `https://assets.pokemon.com/assets/cms2/img/pokedex/full/00${pokemon.pokemon_id}.png`} /> : <PokemonImage src={pokemon.pokemon_id >= 100 ? `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokemon.pokemon_id}.png` : `https://assets.pokemon.com/assets/cms2/img/pokedex/full/0${pokemon.pokemon_id}.png`} />}
           <TypesWrapper>
             {pokemon.pokemonType.map(type => {
                     let imgPath = `images/${type}.png`
@@ -221,7 +217,7 @@ const App: React.FC = () => {
       <Row>
         <PokeForm onSubmit={handleSubmit}>
           <PokeLabel>Enter a number</PokeLabel>
-          <PokemonInput type="number" min="1" max="721" value={id} onChange={handleChange} />
+          <PokemonInput type="number" min="1" max="802" value={id} onChange={handleChange} />
         </PokeForm>
       </Row>
     </Container>
