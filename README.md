@@ -1,4 +1,36 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Pokedex
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/b654c94e-08a6-4b79-b443-7837581b1d8d/deploy-status)](https://app.netlify.com/sites/heuristic-brown-9dc575/deploys)
+
+
+Simple search app that consumes [PokeAPi] and displays basic information about Pokemon created with React JS + Typescript 
+
+
+![Pokedex Preview](./src/assets/images/pokedex.jpg)
+
+
+
+### Tech
+
+The stack I used: 
+
+* [ReactJS] - A JavaScript library for building user interfaces 
+* [Typescript] - Typed JavaScript at any scale
+* [Tailwindcss] - A utility-first CSS framework for
+rapidly building custom designs
+* [Twin.Macro] - Use tailwind classes within jss-in-css libraries
+* [Styled] - Use the best bits of ES6 and CSS to style your apps without stress
+
+
+### Installation
+
+Install the dependencies and start the server.
+
+```sh
+$ cd pokedex
+$ yarn install
+$ yarn build
+```
 
 ## Available Scripts
 
@@ -27,18 +59,35 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `yarn eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Todos
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+ - Write tests
+ - Add pagination
+ - Refactor components
+ - Add addaptive background feature
+ 
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Features
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- Type in the pokemon number and you will get some basic information about the pokemom
 
-## Learn More
+## Status
+Project is: _in progress_
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Inspiration
+Project inspired by Mauro E. Wernly design on dribbble<br>[Shoot]
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+
+Deployed with [![](https://upload.wikimedia.org/wikipedia/commons/b/b8/Netlify_logo.svg)](https://www.netlify.com/)
+
+[//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
+
+
+   [ReactJS]: <https://reactjs.org/>
+   [Typescript]: <https://www.typescriptlang.org/>
+   [Tailwindcss]: <https://tailwindcss.com/>
+   [Twin.Macro]: <https://github.com/ben-rogerson/twin.macro>
+   [Styled]: <https://styled-components.com/>
+   [PokeAPi]: <https://pokeapi.co/>
+   [Shoot]: <https://dribbble.com/shots/6175056-Pok-dex>
