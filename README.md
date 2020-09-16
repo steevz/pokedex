@@ -29,7 +29,7 @@ Install the dependencies and start the server.
 ```sh
 $ cd pokedex
 $ yarn install
-$ yarn build
+$ yarn start
 ```
 
 ## Available Scripts
