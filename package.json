@@ -44,6 +44,7 @@
     "axios": "^0.20.0",
     "babel-plugin-macros": "^2.8.0",
     "postcss-cli": "^7.1.2",
+    "react-paginate": "^6.5.0",
     "react-query": "^2.13.1",
     "react-query-devtools": "^2.4.5",
     "styled-components": "^5.1.1",

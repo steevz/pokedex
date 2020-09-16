@@ -1,72 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios'
-import styled from "styled-components"
-import tw from "twin.macro"
 
 import './assets/styles.css'
 
-const Container = styled.div`
-  ${tw`container bg-transparent p-0 mx-auto my-0`}
-`
 
-const Wrapper = styled.div`
-  ${tw`flex flex-col md:flex-row justify-around items-center`}
-`
+import { Container, Row, PokeForm, PokemonInput, PokeLabel } from './assets/styles'
 
-const Row = styled.div`
-  ${tw`flex flex-col justify-start items-center my-3`}
-`
-const Number = styled.p`
-  ${tw`text-2xl text-white font-black`}
-`
+import Pokemon from './components/Pokemon'
 
-const Name = styled.h1`
-  ${tw`text-2xl text-white font-black uppercase`}
-`
 
-const JapanesseName = styled.h2`
-  ${tw`text-6xl text-white font-black uppercase`}
-`
-
-const PokemonImage = styled.img`
-  object-fit: contain;
-  height: 18rem;
-`
-
-const StatCard = styled.span`
-  ${tw`inline-block bg-gray-200 rounded-lg px-5 py-2 text-sm font-semibold text-gray-700 my-2 uppercase`}
-`
-
-const PokeForm = styled.form`
-  ${tw`px-8 pt-6 pb-8 mb-4`}
-`
-
-const PokeLabel = styled.label`
-  ${tw`block text-white text-sm font-bold mb-2`}
-`
-
-const PokemonInput = styled.input`
-  ${tw`bg-transparent border-b-2 focus:outline-none text-white py-2  block w-64 appearance-none leading-normal font-bold`}
-`
-
-const PokeStat = styled.p`
-  ${tw`text-white font-bold text-sm`}
-`
-
-const RegionText = styled.p`
-  ${tw`text-white font-bold text-xl transform -rotate-90 absolute left-0 capitalize `}
-  bottom: 15%;
-`
-
-const TypesWrapper=styled.div`
-  ${tw`flex flex-row items-center`}
-`
-
-const TypeIcon = styled.img`
-  ${tw`w-8 h-8 object-contain`}
-`
-
-interface IPokemon  {
+interface IPokemon {
   pokemon_id: number
   name: string
   height: number
@@ -86,20 +29,20 @@ interface IPokemon  {
 const App: React.FC = () => {
   const [id, setId] = useState<number>(1)
   const [pokemon, setPokemon] = useState<IPokemon>({
-      pokemon_id: 1,
-      name: '',
-      height: 0,
-      weight: 0,
-      base_experience: 0,
-      baseHp: 0,
-      baseAttack: 0,
-      baseDefense: 0,
-      baseSpecAttack: 0,
-      baseSpecDefense: 0,
-      baseSpeed: 0,
-      jaName: '',
-      pokemonType: [],
-      generationParam: 1,
+    pokemon_id: 1,
+    name: '',
+    height: 0,
+    weight: 0,
+    base_experience: 0,
+    baseHp: 0,
+    baseAttack: 0,
+    baseDefense: 0,
+    baseSpecAttack: 0,
+    baseSpecDefense: 0,
+    baseSpeed: 0,
+    jaName: '',
+    pokemonType: [],
+    generationParam: 1,
   })
   const [region, setRegion] = useState<string>('')
 
@@ -114,59 +57,59 @@ const App: React.FC = () => {
     axios
       .all([requestOne, requestTwo])
       .then(axios.spread((resOne, resTwo) => {
-      // daj mi broj
-      let {data: {id: pokemon_id }} = resOne
-      // daj mi name 
-      let { data: {name } } = resOne
-      // daj mi height
-      let {data: {height}} = resOne
-       // daj mi weight
-       let {data: {weight}} = resOne
-      // daj mi base_exp
-      let {data: {base_experience }} = resOne
-      //  daj mi hp base stat 
-      let {stats: {0: {base_stat: baseHp}}} = resOne.data
-      // daj mi base attack stat
-      let {stats: {1: {base_stat: baseAttack}}} = resOne.data
-      // daj mi base defense stat 
-      let {stats: {2: {base_stat: baseDefense}}} = resOne.data
-      // daj mi base special attack stat
-      let {stats: {3: {base_stat: baseSpecAttack}}} = resOne.data
-      // daj mi base special defense stat
-      let {stats: {4: {base_stat: baseSpecDefense}}} = resOne.data
-      // daj mi base speed stat
-      let {stats: {5: {base_stat: baseSpeed}}} = resOne.data
+        // daj mi broj
+        let { data: { id: pokemon_id } } = resOne
+        // daj mi name 
+        let { data: { name } } = resOne
+        // daj mi height
+        let { data: { height } } = resOne
+        // daj mi weight
+        let { data: { weight } } = resOne
+        // daj mi base_exp
+        let { data: { base_experience } } = resOne
+        //  daj mi hp base stat 
+        let { stats: { 0: { base_stat: baseHp } } } = resOne.data
+        // daj mi base attack stat
+        let { stats: { 1: { base_stat: baseAttack } } } = resOne.data
+        // daj mi base defense stat 
+        let { stats: { 2: { base_stat: baseDefense } } } = resOne.data
+        // daj mi base special attack stat
+        let { stats: { 3: { base_stat: baseSpecAttack } } } = resOne.data
+        // daj mi base special defense stat
+        let { stats: { 4: { base_stat: baseSpecDefense } } } = resOne.data
+        // daj mi base speed stat
+        let { stats: { 5: { base_stat: baseSpeed } } } = resOne.data
 
-      // daj mi types
-      let types = resOne.data.types;
-      let pokemonType:string[] = [];
-      types.forEach((obj: any) => { pokemonType.push(obj.type.name) })
+        // daj mi types
+        let types = resOne.data.types;
+        let pokemonType: string[] = [];
+        types.forEach((obj: any) => { pokemonType.push(obj.type.name) })
 
-      // daj mi japansko ime
-      let {names: {9: {name: jaName }}} = resTwo.data
-      
-      let {generation: {url: generationURL }} = resTwo.data
-      let generationParamString = generationURL.substring(37,38);
-      let generationParam = parseInt(generationParamString, 10)
+        // daj mi japansko ime
+        let { names: { 9: { name: jaName } } } = resTwo.data
 
-      let responseObject = (() => ({pokemon_id, name, height, weight, base_experience, baseHp, baseAttack, baseDefense, baseSpecAttack, baseSpecDefense, baseSpeed, jaName, pokemonType, generationParam}))
-      setPokemon(responseObject) 
-      getRegion(generationParam)
-    }))
-  },[])
+        let { generation: { url: generationURL } } = resTwo.data
+        let generationParamString = generationURL.substring(37, 38);
+        let generationParam = parseInt(generationParamString, 10)
+
+        let responseObject = (() => ({ pokemon_id, name, height, weight, base_experience, baseHp, baseAttack, baseDefense, baseSpecAttack, baseSpecDefense, baseSpeed, jaName, pokemonType, generationParam }))
+        setPokemon(responseObject)
+        getRegion(generationParam)
+      }))
+  }, [])
 
 
   const getRegion = (gen_id: number) => {
     let region = `https://pokeapi.co/api/v2/generation/${gen_id}/`
 
     axios
-        .get(region)
-        .then((resThree) => {
-            // daj mi region name
-            let {main_region: {name: regionName }} = resThree.data
-            setRegion(regionName)
-        })
-    
+      .get(region)
+      .then((resThree) => {
+        // daj mi region name
+        let { main_region: { name: regionName } } = resThree.data
+        setRegion(regionName)
+      })
+
   }
 
   // hook za lifeCycle componentWillMount
@@ -185,35 +128,23 @@ const App: React.FC = () => {
 
   return (
     <Container>
-      <Row>  
-        {pokemon.pokemon_id < 10 ? <Number>{pokemon.pokemon_id >= 10  ? `${pokemon.pokemon_id}` : `00${pokemon.pokemon_id}`}</Number>  : <Number>{pokemon.pokemon_id >= 100  ? `${pokemon.pokemon_id}` : `0${pokemon.pokemon_id}`}</Number>  }  
-        <Name>{pokemon.name}</Name>
-      </Row>
-      <Wrapper>
-        <Row>
-          {region ? <RegionText>Region: {region}</RegionText> : undefined}
-          <JapanesseName>{pokemon.jaName}</JapanesseName>
-          {pokemon.pokemon_id < 10 ? <PokemonImage src={pokemon.pokemon_id >= 10 ? `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokemon.pokemon_id}.png` : `https://assets.pokemon.com/assets/cms2/img/pokedex/full/00${pokemon.pokemon_id}.png`} /> : <PokemonImage src={pokemon.pokemon_id >= 100 ? `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokemon.pokemon_id}.png` : `https://assets.pokemon.com/assets/cms2/img/pokedex/full/0${pokemon.pokemon_id}.png`} />}
-          <TypesWrapper>
-            {pokemon.pokemonType.map(type => {
-                    let imgPath = `images/${type}.png`
-                    return <TypeIcon key={type} src={imgPath} />
-            })}
-          </TypesWrapper>
-          <PokeStat>Height: {pokemon.height / 10} m</PokeStat>
-          <PokeStat>Weight: {pokemon.weight / 10} kg</PokeStat>
-        </Row>
-        <Row>
-          <StatCard>{pokemon.baseHp} base hp</StatCard>
-          <StatCard>{pokemon.baseAttack} base attack</StatCard>
-          <StatCard>{pokemon.baseDefense} base defense</StatCard>
-        </Row>
-        <Row>
-          <StatCard>{pokemon.baseSpeed} base speed</StatCard>
-          <StatCard>{pokemon.baseSpecAttack} base sp.attack</StatCard>
-          <StatCard>{pokemon.baseSpecDefense} base sp.defense</StatCard>
-        </Row>
-      </Wrapper>
+      <Pokemon
+        pokemon_id={pokemon.pokemon_id}
+        name={pokemon.name}
+        height={pokemon.height}
+        weight={pokemon.weight}
+        base_experience={pokemon.base_experience}
+        baseHp={pokemon.baseHp}
+        baseAttack={pokemon.baseAttack}
+        baseDefense={pokemon.baseDefense}
+        baseSpecAttack={pokemon.baseSpecAttack}
+        baseSpecDefense={pokemon.baseSpecDefense}
+        baseSpeed={pokemon.baseSpeed}
+        jaName={pokemon.jaName}
+        pokemonType={pokemon.pokemonType}
+        generationParam={pokemon.generationParam}
+        region={region}
+      />
       <Row>
         <PokeForm onSubmit={handleSubmit}>
           <PokeLabel>Enter a number</PokeLabel>
